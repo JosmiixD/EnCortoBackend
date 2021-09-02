@@ -1,0 +1,21 @@
+{
+  "name": "en_corto_server",
+  "version": "1.0.0",
+  "description": "Backend Server for En Corto Delivery App",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "flutter",
+    "delivery",
+    "nodejs",
+    "mysql"
+  ],
+  "author": "Josmar Salvador Marroquin Parra",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "http": "0.0.1-security"
+  }
+}
