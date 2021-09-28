@@ -4,6 +4,7 @@ const http = require('http');
 const server = http.createServer(app);
 const logger = require('morgan');
 const cors = require('cors');
+const passport = require('passport');
 
 
 //BEGIN:: Routes
@@ -19,6 +20,10 @@ app.use( express.urlencoded({
 }));
 
 app.use(cors());
+app.use(passport.initialize());
+app.use(passport.session());
+require('./config/passport')(passport);
+
 app.disabled('x-powered-by');
 
 app.set('port', port);

@@ -2,6 +2,7 @@ const User = require('../models/user');
 const Role = require('../models/role');
 const jwt = require('jsonwebtoken');
 const keys = require('../config/keys');
+const { update } = require('../models/user');
 
 module.exports = {
 
@@ -25,6 +26,7 @@ module.exports = {
         try {
             
             const user = req.body;
+            
             const user_created = await User.create(user);
 
             await Role.create( user_created.id, 1); //DEFAULT ROLE
@@ -62,6 +64,41 @@ module.exports = {
 
     },
 
+    async update( req, res, next ) {
+
+        try {
+
+            const user = req.body;
+            const user_updated = await User.update( user );
+            const result = await User.getById( user_updated.id );
+            console.log(result);
+            const data = {
+                id: result.id,
+                name: result.name,
+                lastname: result.lastname,
+                email: result.email,
+                phone: result.phone,
+                image: result.image,
+                session_token: result.session_token,
+                roles: result.roles
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: 'Datos actualizados correctamente',
+                data: data
+            });
+            
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                message: 'Ocurrio un error durante la actualización',
+                error: error
+            });
+        }
+
+    },
+
     async login( req, res, next ) {
         try {
             
@@ -87,9 +124,11 @@ module.exports = {
                     email: user.email,
                     phone: user.phone,
                     image: user.image,
-                    session_token: 'JWT ' + token,
+                    session_token: `JWT ${token}`,
                     roles: user.roles
                 }
+
+                await User.updateToken( user.id, `JWT ${token}`);
 
                 return res.status(200).json({
                     success: true,

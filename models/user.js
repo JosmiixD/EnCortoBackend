@@ -142,6 +142,49 @@ User.getById = ( id ) => {
     return db.oneOrNone( sql, id);
 }
 
+User.update = ( user ) => {
+    const sql = `
+        UPDATE
+            users
+        SET
+            name = $2,
+            lastname = $3,
+            phone = $4,
+            image = $5,
+            updated_at = $6
+        WHERE
+            id = $1
+        RETURNING id
+    `;
+
+    return db.oneOrNone( sql, [
+        user.id,
+        user.name,
+        user.lastname,
+        user.phone,
+        user.image,
+        new Date()
+    ]);
+
+}
+
+User.updateToken = ( id, token ) => {
+    const sql = `
+        UPDATE
+            users
+        SET
+            session_token = $2
+        WHERE
+            id = $1
+    `;
+
+    return db.oneOrNone( sql, [
+        id,
+        token,
+    ]);
+
+}
+
 User.isPasswordMatched = ( userPassword, hash ) => {
     const myPasswordHashed = crypto.createHash('md5').update( userPassword ).digest('hex');
     if( myPasswordHashed === hash ) {

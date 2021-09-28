@@ -16,7 +16,7 @@ INSERT INTO roles(
 )
 VALUES(
 	'CLIENTE',
-	'client/products/list',
+	'client/navigation',
 	'2021-05-22',
 	'2021-05-22'
 );
