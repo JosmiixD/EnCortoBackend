@@ -32,7 +32,7 @@ app.set('port', port);
 users( app );
 //END: Call Routes
 
-server.listen( 3000, '192.168.0.17' || 'localhost', function () {
+server.listen( 3000, '192.168.0.15' || 'localhost', function () {
     console.log('NodeJs App ' + port + ' Initialized');
 });
 

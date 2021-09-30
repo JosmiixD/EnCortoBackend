@@ -115,7 +115,7 @@ module.exports = {
 
             if( User.isPasswordMatched( password, user.password ) ) {
                 const token = jwt.sign({ id: user.id, email: user.email}, keys.secretOrKey, {
-                    // expiresIn: ( 60 * 60 * 24)
+                    expiresIn: ( "14d" )
                 });
                 const data = {
                     id: user.id,
@@ -150,6 +150,44 @@ module.exports = {
                 error: error
             });
         }
+    },
+    async tokenRenew( req, res, next ) {
+
+        try {
+
+            const id = req.body.id;
+            const user = await User.getById( id );
+            const token = jwt.sign({ id: user.id, email: user.email}, keys.secretOrKey, {
+                expiresIn: ( "14d" )
+            });
+
+            const data = {
+                id: user.id,
+                name: user.name,
+                lastname: user.lastname,
+                email: user.email,
+                phone: user.phone,
+                image: user.image,
+                session_token: `JWT ${token}`,
+                roles: user.roles
+            }
+
+            await User.updateToken( user.id, `JWT ${token}` );
+
+            return res.status(200).json({
+                success: true,
+                data: data,
+                message: 'Nos alegra verte por aqui nuevamente ' + user.name
+            });
+            
+        } catch (e) {
+            return res.status( 500 ).json({
+                success: false,
+                message: 'Ocurrio un error durante el proceso',
+                error: error
+            });
+        }
+
     }
 
 }
